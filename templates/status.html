@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Management System - Registration Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-active {
+            background-color: #8369D3;
+            color: white;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex bg-cover bg-center" style="background-image: url('{% static "Stat.png" %}');">
+
+    <aside class="w-72 bg-[#1A1625] text-gray-400 flex flex-col p-8 sticky top-0 h-screen">
+        <div class="flex items-center gap-3 mb-12">
+            <div class="bg-white p-1 rounded-lg">
+                    <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m-5 0V4h5"></path></svg>
+                </div>
+            <div class="text-[10px] font-bold leading-tight text-white uppercase tracking-widest">
+                Hostel <br> Management System
+            </div>
+        </div>
+        <nav class="flex-1 space-y-2">
+            <a href="{% url 'home' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V10.5Z"/></svg>
+                <span class="text-sm font-medium">Home</span>
+            </a>
+    
+            <a href="{% url 'room' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/><path d="M8 10h8M8 14h8M8 6h8"/></svg>
+                <span class="text-sm font-medium">Rooms</span>
+            </a>
+            <a href="{% url 'status' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl sidebar-active shadow-lg shadow-purple-900/20">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18V9"/><path d="M12 18V5"/><path d="M19 18V13"/><path d="M3 18h18"/></svg>
+                <span class="text-sm font-medium">Status Check</span>
+            </a>
+            <a href="{% url 'fee' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="11" rx="2"/><path d="M3 11h18"/><path d="M7 7v-2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2"/></svg>
+                <span class="text-sm font-medium">Fees</span>
+            </a>
+            <a href="{% url 'complaint' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2h8a2 2 0 0 1 2 2v18H6V4a2 2 0 0 1 2-2Z"/><path d="M8 6h8"/><path d="M8 12h8"/><path d="M8 18h5"/></svg>
+                <span class="text-sm font-medium">Student Complaint</span>
+            </a>
+            <a href="{% url 'profile' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+                <span class="text-sm font-medium">Profile</span>
+            </a>
+        </nav>
+        <div class="p-6 border-t border-gray-800">
+                {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="flex items-center gap-3 text-gray-500 hover:text-white transition text-sm w-full">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        Logout
+                    </button>
+                </form>
+                {% else %}
+                <a href="{% url 'login' %}" class="flex items-center gap-3 text-gray-500 hover:text-white transition text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Login
+                </a>
+                {% endif %}
+            </div>
+    </aside>
+
+    <main class="flex-1 p-10 overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+            
+            <header class="flex justify-between items-center mb-10 text-white">
+                <div>
+                    <h1 class="text-4xl font-extrabold tracking-tight">Registration Center</h1>
+                    <p class="text-sm mt-1">Dashboard / <span class="font-semibold">Status Check</span></p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="relative cursor-pointer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white/40 p-1.5 pr-5 rounded-full border border-white/60">
+                        <img src="https://ui-avatars.com/api/?name={{ user.username|urlencode }}&background=8369D3&color=fff" class="w-9 h-9 rounded-full" alt="User">
+                        <div>
+                            <p class="text-xs font-bold leading-none text-white">{{ user.username }}</p>
+                            <p class="text-[10px] text-white font-medium">Student</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="bg-white rounded-[2rem] p-10 shadow-xl shadow-purple-200/50 mb-10 max-w-5xl">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800">Student Applications</h2>
+                    <button onclick="window.location.href='{% url 'room' %}'" class="bg-[#8369D3] text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-purple-200 hover:bg-[#7156c7] transition-all">
+                        New Registration
+                    </button>
+                </div>
+
+                <div class="flex gap-4 mb-8">
+                    <div class="flex-1 flex items-center gap-2 bg-gray-50 rounded-xl px-4 py-3 border border-gray-200">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"></path></svg>
+                        <input type="text" id="searchInput" placeholder="Search by name or ID..." class="flex-1 bg-transparent outline-none font-medium text-gray-800">
+                    </div>
+                    <select class="px-6 py-3 bg-gray-50 border border-gray-200 rounded-xl font-semibold focus:ring-2 focus:ring-[#8369D3] outline-none text-gray-800">
+                        <option>All Status</option>
+                        <option>Approved</option>
+                        <option>Pending</option>
+                        <option>Rejected</option>
+                    </select>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-left text-[10px] text-gray-400 uppercase tracking-[0.2em] border-b border-gray-100">
+                                <th class="pb-6 font-bold">Student Name</th>
+                                <th class="pb-6 font-bold">Student ID</th>
+                                <th class="pb-6 font-bold">Gender</th>
+                                <th class="pb-6 font-bold">Application Date</th>
+                                <th class="pb-6 font-bold text-center">Status</th>
+                                <th class="pb-6 font-bold text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50/50" id="studentTable">
+                            <tr class="group hover:bg-gray-30 transition-colors">
+                                <td class="py-5">
+                                    <p class="font-semibold text-gray-800">Sarah Johnson</p>
+                                </td>
+                                <td class="py-5 text-sm text-gray-600">A-103</td>
+                                <td class="py-5 text-sm text-gray-600">Female</td>
+                                <td class="py-5 text-sm text-gray-600">Apr 18, 2024</td>
+                                <td class="py-5 text-center">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-600">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Approved
+                                    </span>
+                                </td>
+                                <td class="py-5 text-center">
+                                    <button class="bg-[#8369D3] text-white px-6 py-2 rounded-lg text-xs font-bold hover:bg-[#7156c7]">View</button>
+                                </td>
+                            </tr>
+                            <tr class="group hover:bg-gray-30 transition-colors">
+                                <td class="py-5">
+                                    <p class="font-semibold text-gray-800">Amit Kumar</p>
+                                </td>
+                                <td class="py-5 text-sm text-gray-600">A-102</td>
+                                <td class="py-5 text-sm text-gray-600">Male</td>
+                                <td class="py-5 text-sm text-gray-600">Apr 12, 2024</td>
+                                <td class="py-5 text-center">
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-yellow-100 text-yellow-600">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span> Pending
+                                    </span>
+                                </td>
+                                <td class="py-5 text-center">
+                                    <button class="bg-[#8369D3] text-white px-6 py-2 rounded-lg text-xs font-bold hover:bg-[#7156c7]">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex justify-between items-center mt-8 text-sm text-gray-600">
+                    <span class="font-semibold">Showing 1 to 2 of 30 entries</span>
+                    <div class="flex items-center gap-3">
+                        <button class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition font-semibold">Prev</button>
+                        <span class="px-3 py-2 bg-[#8369D3] text-white rounded-lg font-bold">1</span>
+                        <span class="font-semibold">of 15</span>
+                        <button class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition font-semibold">Next</button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+</body>
+<script>
+    // Simple search functionality
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', function() {
+            let filter = searchInput.value.toLowerCase();
+            let rows = document.querySelectorAll('#studentTable tr');
+
+            rows.forEach(row => {
+                let text = row.innerText.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            });
+        });
+    }
+</script>
+</html>

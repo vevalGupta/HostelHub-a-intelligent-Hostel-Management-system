@@ -1,0 +1,246 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Hostel Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+        .sidebar-active {
+            background-color: #6D54B5;
+            color: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex bg-cover bg-center" style="background-image: url('{% static "home.png" %}');">
+
+    <aside class="w-72 bg-[#1A1625] text-gray-400 flex flex-col p-8 sticky top-0 h-screen">
+        <div class="flex items-center gap-3 mb-12">
+            <div class="bg-white p-1 rounded-lg">
+                    <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m-5 0V4h5"></path></svg>
+                </div>
+            <div class="text-[10px] font-bold leading-tight text-white uppercase tracking-widest">
+                Hostel <br> Management System
+            </div>
+        </div>
+        <nav class="flex-1 space-y-2">
+            <a href="{% url 'home' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+                <span class="text-sm font-medium">Home</span>
+            </a>
+    
+            <a href="{% url 'room' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21V7a1 1 0 011-1h14a1 1 0 011 1v14"/><path d="M8 21V11h8v10"/><path d="M8 7V4h8v3"/></svg>
+                <span class="text-sm font-medium">Rooms</span>
+            </a>
+            <a href="{% url 'status' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16h4v4H4z"/><path d="M10 10h4v10h-4z"/><path d="M16 4h4v16h-4z"/></svg>
+                <span class="text-sm font-medium">Status Check</span>
+            </a>
+            <a href="{% url 'fee' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 6h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/><path d="M8 10h8"/><path d="M8 14h6"/></svg>
+                <span class="text-sm font-medium">Fee</span>
+            </a>
+            <a href="{% url 'complaint' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10v6a2 2 0 0 1-2 2H6l-2 2V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+                <span class="text-sm font-medium">Student Complaint</span>
+            </a>
+            <a href="{% url 'profile' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl sidebar-active shadow-lg shadow-purple-900/20">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+                <span class="text-sm font-medium">Profile</span>
+            </a>
+        </nav>
+        <div class="p-6 border-t border-gray-800">
+                {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="flex items-center gap-3 text-gray-500 hover:text-white transition text-sm w-full">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        Logout
+                    </button>
+                </form>
+                {% else %}
+                <a href="{% url 'login' %}" class="flex items-center gap-3 text-gray-500 hover:text-white transition text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Login
+                </a>
+                {% endif %}
+            </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col">
+            <header class="p-6 flex justify-between items-center bg-transparent">
+                <div>
+                    <h2 class="text-3xl font-bold text-white">My Profile</h2>
+                    <p class="text-white/70">View and manage your personal information and account settings.</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-white hover:text-purple-600">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white">
+                            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                        </svg>
+                        <span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+                    <div class="flex items-center space-x-3 bg-white/15 border border-white/25 p-2.5 pr-5 rounded-full shadow-lg shadow-white/10 backdrop-blur-xl">
+                        <div class="h-10 w-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            VE
+                        </div>
+                        <div class="text-xs">
+                            <p class="font-semibold leading-none text-white">{{ user.username|default:"Veval" }}</p>
+                            <p class="text-white/70 uppercase tracking-[0.15em] text-[10px]">Student</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-100">
+                        <div class="relative overflow-hidden bg-cover bg-center" style="background-image: url('{% static "home.png" %}');">
+                            <div class="absolute inset-0 bg-black/10"></div>
+                            <div class="relative p-8 text-white flex items-center space-x-6">
+                                <div class="h-24 w-24 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-3xl font-bold border-2 border-white/40">
+                                    VE
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold">{{ user.get_full_name|default:"Veval" }}</h3>
+                                    <span class="px-3 py-1 bg-white/20 rounded-full text-xs font-semibold uppercase tracking-wider">Student</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-slate-500"><i class="far fa-envelope mr-2 w-5"></i> Email</span>
+                                <span class="font-medium">{{ user.email|default:"veval@student.com" }}</span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-slate-500"><i class="fas fa-phone-alt mr-2 w-5"></i> Phone</span>
+                                <span class="font-medium">+91 98765 43210</span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-slate-500"><i class="far fa-calendar-alt mr-2 w-5"></i> Date of Birth</span>
+                                <span class="font-medium">Jan 15, 2003</span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-slate-500"><i class="fas fa-venus-mars mr-2 w-5"></i> Gender</span>
+                                <span class="font-medium">Male</span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-slate-500"><i class="far fa-id-card mr-2 w-5"></i> Student ID</span>
+                                <span class="font-medium">HS1003</span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-slate-500"><i class="fas fa-door-open mr-2 w-5"></i> Room</span>
+                                <span class="font-medium">A-102</span>
+                            </div>
+                            <button class="w-full mt-4 py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition shadow-lg shadow-purple-200">
+                                <i class="far fa-edit mr-2"></i> Edit Profile
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm p-6 border border-slate-100">
+                        <h4 class="text-purple-600 font-bold mb-4 flex items-center">
+                            <i class="far fa-clock mr-2"></i> Recent Activity
+                        </h4>
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-center text-sm">
+                                <span class="flex items-center"><span class="h-2 w-2 bg-green-500 rounded-full mr-3"></span> Logged in</span>
+                                <span class="text-slate-400">
+                                    {% if user.last_login %}
+            {{ user.last_login|date:"M d, Y h:i A" }}
+        {% else %}
+            Not Available
+        {% endif %}
+                                </span>
+                            </li>
+                            <li class="flex justify-between items-center text-sm">
+                                <span class="flex items-center"><span class="h-2 w-2 bg-green-500 rounded-full mr-3"></span> Profile updated</span>
+                                <span class="text-slate-400">Mar 10, 2026 02:15 PM</span>
+                            </li>
+                            <li class="flex justify-between items-center text-sm">
+                                <span class="flex items-center"><span class="h-2 w-2 bg-green-500 rounded-full mr-3"></span> Fee payment completed</span>
+                                <span class="text-slate-400">Mar 26, 2026 02:23 PM</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl shadow-sm p-8 border border-slate-100">
+                        <h4 class="text-purple-600 font-bold mb-6 flex items-center">
+                            <i class="fas fa-user-shield mr-2"></i> Account Information
+                        </h4>
+                        <div class="space-y-6 text-sm">
+                            <div class="flex justify-between items-center border-b pb-4">
+                                <span class="text-slate-500">Role</span>
+                                <span class="bg-purple-50 text-purple-600 px-3 py-1 rounded text-xs font-bold uppercase">Student</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-4">
+                                <span class="text-slate-500">Member Since</span>
+                                <span class="font-medium text-slate-700">Jan 20, 2026</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b pb-4">
+                                <span class="text-slate-500">Last Login</span>
+                                <span class="font-medium text-slate-700">
+                                    {% if user.last_login %}
+            {{ user.last_login|date:"M d, Y h:i A" }}
+        {% else %}
+            Not Available
+        {% endif %}
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-500">Account Status</span>
+                                <span class="bg-green-100 text-green-600 px-3 py-1 rounded text-xs font-bold uppercase">Active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm p-8 border border-slate-100">
+                        <h4 class="text-purple-600 font-bold mb-6 flex items-center">
+                            <i class="fas fa-lock mr-2"></i> Change Password
+                        </h4>
+                        <form action="{% url 'profile' %}" method="post" class="space-y-4">
+                            {% csrf_token %}
+                            <div>
+                                <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Current Password</label>
+                                <div class="relative mt-1">
+                                    <input type="password" name="old_password" placeholder="Enter current password" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition">
+                                    <i class="far fa-eye-slash absolute right-4 top-4 text-slate-400 cursor-pointer"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">New Password</label>
+                                <div class="relative mt-1">
+                                    <input type="password" name="new_password1" placeholder="Enter new password" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition">
+                                    <i class="far fa-eye-slash absolute right-4 top-4 text-slate-400 cursor-pointer"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Confirm New Password</label>
+                                <div class="relative mt-1">
+                                    <input type="password" name="new_password2" placeholder="Confirm new password" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-400 outline-none transition">
+                                    <i class="far fa-eye-slash absolute right-4 top-4 text-slate-400 cursor-pointer"></i>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition shadow-lg shadow-purple-200">
+                                Update Password
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+</body>
+</html>

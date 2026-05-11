@@ -1,0 +1,298 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .bg-sidebar { background-color: #1a1625; }
+        .bg-main { background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .room-card { transition: all 0.2s ease; cursor: pointer; }
+        .room-card:hover { transform: scale(1.02); }
+        .sidebar-active {
+            background-color: #6D54B5;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-main bg-cover bg-center min-h-screen flex text-gray-800" style="background-image: url('{% static "home.png" %}');" x-data="hostelApp()">
+
+    <aside class="w-72 bg-[#1A1625] text-gray-400 flex flex-col p-8 sticky top-0 h-screen">
+        <div class="flex items-center gap-3 mb-12">
+            <div class="bg-white p-1 rounded-lg">
+                <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m-5 0V4h5"></path></svg>
+            </div>
+            <div class="text-[10px] font-bold leading-tight text-white uppercase tracking-widest">
+                Hostel <br> Management System
+            </div>
+        </div>
+        <nav class="flex-1 space-y-2">
+            <a href="{% url 'home' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+                <span class="text-sm font-medium">Home</span>
+            </a>
+            <a href="{% url 'room' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl sidebar-active shadow-lg shadow-purple-900/20">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21V7a1 1 0 011-1h14a1 1 0 011 1v14"/><path d="M8 21V11h8v10"/><path d="M8 7V4h8v3"/></svg>
+                <span class="text-sm font-medium">Rooms</span>
+            </a>
+            <a href="{% url 'status' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16h4v4H4z"/><path d="M10 10h4v10h-4z"/><path d="M16 4h4v16h-4z"/></svg>
+                <span class="text-sm font-medium">Status Check</span>
+            </a>
+            <a href="{% url 'fee' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 6h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/><path d="M8 10h8"/><path d="M8 14h6"/></svg>
+                <span class="text-sm font-medium">Fee</span>
+            </a>
+            <a href="{% url 'complaint' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10v6a2 2 0 0 1-2 2H6l-2 2V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+                <span class="text-sm font-medium">Complaints</span>
+            </a>
+            <a href="{% url 'profile' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+                <span class="text-sm font-medium">Profile</span>
+            </a>
+        </nav>
+        <div class="p-6 border-t border-gray-800">
+            {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="flex items-center gap-3 text-gray-500 hover:text-white transition text-sm w-full">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Logout
+                </button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}" class="flex items-center gap-3 text-gray-500 hover:text-white transition text-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                Login
+            </a>
+            {% endif %}
+        </div>
+    </aside>
+
+    <main class="flex-1 p-8 overflow-y-auto">
+        <header class="flex justify-between items-center mb-6 text-white">
+            <div>
+                <h2 class="text-3xl font-bold">Select Your Preferred Room</h2>
+                <p class="opacity-80">Choose an available room on the map below</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <i class="fa-regular fa-bell text-xl"></i>
+                <div class="flex items-center space-x-2 bg-white/20 p-2 rounded-full pr-4">
+                    <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center font-bold">VE</div>
+                    <div class="text-xs">
+                        <p class="font-bold">veval</p>
+                        <p>STUDENT</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="bg-white rounded-3xl p-8 shadow-2xl flex gap-8">
+            <div class="w-1/4 space-y-6">
+                <select class="w-full p-3 border rounded-xl bg-gray-50 font-semibold">
+                    <option>Hostel A - First Floor</option>
+                </select>
+
+                <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
+                    <h4 class="font-bold mb-3">How to select?</h4>
+                    <ul class="text-xs space-y-3">
+                        <li class="flex items-start space-x-2">
+                            <span class="bg-green-100 text-green-600 p-1 rounded-md px-2">1</span>
+                            <span>Click on any available room</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="bg-indigo-100 text-indigo-600 p-1 rounded-md px-2">2</span>
+                            <span>Review your selection</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="bg-indigo-100 text-indigo-600 p-1 rounded-md px-2">2</span>
+                            <span>Confirm your allotment </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="space-y-2" x-show="selectedRoom">
+                    <h4 class="font-bold">Room Details</h4>
+                    <div class="text-sm grid grid-cols-2 gap-y-2 text-gray-500">
+                        <span>Room No.</span> <span class="text-black font-bold" x-text="selectedRoom.id"></span>
+                        <span>Type</span> <span class="text-black" x-text="selectedRoom.type"></span>
+                        <span>Floor</span> <span class="text-black">First Floor</span>
+                        <span>Occupancy</span> <span class="text-black" x-text="selectedRoom.occupancy"></span>
+                        <span>Price</span> <span class="text-black" x-text="'₹ ' + selectedRoom.price"></span>
+                    </div>
+                    
+                    <div class="pt-4 border-t border-gray-100 space-y-3">
+                        <p class="text-xs text-gray-500">Amenities</p>
+                        <div class="grid grid-cols-3 gap-2 text-xs text-gray-600">
+                            <div class="flex flex-col items-center gap-1 text-center bg-gray-50 p-2 rounded-lg"><i class="fa-solid fa-wifi text-base text-indigo-400"></i>Wi-Fi</div>
+                            <div class="flex flex-col items-center gap-1 text-center bg-gray-50 p-2 rounded-lg"><i class="fa-solid fa-chair text-base text-indigo-400"></i>Study Table</div>
+                            <div class="flex flex-col items-center gap-1 text-center bg-gray-50 p-2 rounded-lg"><i class="fa-solid fa-door-closed text-base text-indigo-400"></i>Wardrobe</div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-green-600 font-medium bg-green-50 p-2 rounded-lg px-3">
+                            <i class="fa-solid fa-bath"></i> Attached Washroom
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 border-l pl-8">
+                <div class="flex justify-end space-x-4 mb-6 text-xs font-medium">
+                    <span class="flex items-center"><span class="w-3 h-3 bg-green-200 rounded mr-2"></span> Available</span>
+                    <span class="flex items-center"><span class="w-3 h-3 bg-indigo-500 rounded mr-2"></span> Selected</span>
+                    <span class="flex items-center"><span class="w-3 h-3 bg-orange-200 rounded mr-2"></span> Occupied</span>
+                    <span class="flex items-center"><span class="w-3 h-3 bg-purple-200 rounded mr-2"></span> Female Block</span>
+                </div>
+
+                <div class="grid grid-cols-8 gap-2 bg-gray-50 p-6 rounded-2xl border relative">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-gray-400">NORTH</div>
+                    
+                    <template x-for="room in rooms.slice(0, 8)">
+                        <div 
+                            @click="selectRoom(room)"
+                            :class="{
+                                'bg-green-100 border-green-200': room.status === 'available',
+                                'bg-orange-100 border-orange-200': room.status === 'occupied',
+                                'bg-purple-100 border-purple-200': room.status === 'female',
+                                'ring-4 ring-indigo-400 bg-indigo-100 border-indigo-400': selectedRoom && selectedRoom.id === room.id
+                            }"
+                            class="room-card border-2 h-24 rounded-lg p-2 flex flex-col justify-between items-center text-center relative">
+                            <span class="text-[10px] font-bold" x-text="room.id"></span>
+                            <span class="text-[8px]" x-text="room.occupancy"></span>
+                            <div class="absolute bottom-1 right-1 w-2 h-4 border-l border-t rounded-tl-sm border-gray-300"></div>
+                        </div>
+                    </template>
+
+                    <div class="col-span-8 h-28 grid grid-cols-12 gap-2 items-center px-4 py-2 border-y-2 border-dashed my-2">
+                        <div class="col-span-1 flex flex-col items-center justify-center gap-1 border-r pr-2 h-full">
+                            <i class="fa-solid fa-stairs text-gray-400 text-lg"></i>
+                            <span class="text-[8px] font-bold text-gray-500">Staircase</span>
+                        </div>
+                        
+                        <div class="col-span-1 border rounded-lg bg-white h-12 flex items-center justify-center text-gray-400 text-xs">
+                           <i class="fa-solid fa-couch"></i>
+                        </div>
+                         <div class="col-span-1 border rounded-lg bg-white h-12 flex items-center justify-center text-gray-400 text-xs">
+                           <i class="fa-solid fa-couch"></i>
+                        </div>
+
+                        <div class="col-span-3 flex-1 flex flex-col gap-2 items-center justify-center text-gray-400 font-bold tracking-widest text-sm relative h-full border-x px-2">
+                            LOBBY
+                            <i class="fa-solid fa-seedling text-green-300 text-lg"></i>
+                        </div>
+
+                         <div class="col-span-1 border rounded-lg bg-white h-12 flex items-center justify-center text-gray-400 text-xs">
+                           <i class="fa-solid fa-couch"></i>
+                        </div>
+
+                        <div class="col-span-2 border rounded-lg bg-indigo-50 border-indigo-100 flex flex-col items-center justify-center p-2 text-center text-indigo-700 h-20">
+                            <i class="fa-solid fa-person text-xl mb-1"></i>
+                            <span class="text-[9px] font-bold">Male Washroom</span>
+                        </div>
+                        
+                        <div class="col-span-1 flex flex-col items-center justify-center h-full border-l pl-2 text-gray-500 text-[10px]">
+                            Pantry
+                        </div>
+
+                        <div class="col-span-2 border rounded-lg bg-indigo-50 border-indigo-100 flex flex-col items-center justify-center p-2 text-center text-indigo-700 h-20">
+                            <i class="fa-solid fa-person text-xl mb-1"></i>
+                            <span class="text-[9px] font-bold">Male Washroom</span>
+                        </div>
+
+                         <div class="col-span-1 flex flex-col items-center justify-center gap-1 border-l pl-2 h-full">
+                            <i class="fa-solid fa-stairs text-gray-400 text-lg"></i>
+                            <span class="text-[8px] font-bold text-gray-500">Staircase</span>
+                        </div>
+                    </div>
+
+                    <template x-for="room in rooms.slice(8, 16)">
+                        <div 
+                            @click="selectRoom(room)"
+                            :class="{
+                                'bg-green-100 border-green-200': room.status === 'available',
+                                'bg-orange-100 border-orange-200': room.status === 'occupied',
+                                'bg-purple-100 border-purple-200': room.status === 'female',
+                                'ring-4 ring-indigo-400 bg-indigo-100 border-indigo-400': selectedRoom && selectedRoom.id === room.id
+                            }"
+                            class="room-card border-2 h-24 rounded-lg p-2 flex flex-col justify-between items-center text-center relative">
+                            <div class="absolute top-1 right-1 w-2 h-4 border-l border-b rounded-bl-sm border-gray-300"></div>
+                            <span class="text-[10px] font-bold" x-text="room.id"></span>
+                            <span class="text-[8px]" x-text="room.occupancy"></span>
+                        </div>
+                    </template>
+                </div>
+                 <div class="text-center mt-3 text-[10px] font-bold text-gray-400">SOUTH</div>
+            </div>
+        </div>
+        
+        <div class="mt-5 bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex items-center gap-3 text-indigo-800 text-sm">
+            <i class="fa-solid fa-circle-info text-lg"></i>
+            <div>
+                 You can only select one room. <br>
+                 Once confirmed, you won't be able to change it.
+            </div>
+        </div>
+
+        <div x-show="selectedRoom" class="mt-6 bg-white p-6 rounded-3xl shadow-xl flex justify-between items-center border border-gray-100">
+            <div class="flex space-x-10 text-center">
+                <div><p class="text-xs text-gray-400 mb-1">Selected Room</p><p class="text-2xl font-bold text-indigo-600" x-text="selectedRoom.id"></p></div>
+                <div class="border-l pl-10"><p class="text-xs text-gray-400 mb-1">Type</p><p class="font-bold text-sm" x-text="selectedRoom.type"></p></div>
+                <div class="border-l pl-10"><p class="text-xs text-gray-400 mb-1">Floor</p><p class="font-bold text-sm">First Floor</p></div>
+                <div class="border-l pl-10"><p class="text-xs text-gray-400 mb-1">Occupancy</p><p class="font-bold text-sm" x-text="selectedRoom.occupancy"></p></div>
+                <div class="border-l pl-10"><p class="text-xs text-gray-400 mb-1">Price / Semester</p><p class="font-bold text-sm" x-text="'₹ ' + selectedRoom.price"></p></div>
+            </div>
+            <div class="flex flex-col gap-3 items-center">
+                <button class="bg-indigo-600 text-white px-10 py-3 rounded-xl font-bold hover:bg-indigo-700 transition flex items-center gap-2 text-sm shadow-md shadow-indigo-200">
+                    <i class="fa-solid fa-check"></i>
+                    Confirm Selection
+                </button>
+                <button @click="selectedRoom = null" class="text-xs text-indigo-600 font-medium hover:text-indigo-800 transition">
+                    Cancel Selection
+                </button>
+            </div>
+        </div>
+        
+        <div class="mt-6 bg-purple-50 border border-purple-100 text-purple-700 text-xs font-medium p-4 rounded-xl flex items-center gap-2 justify-center">
+             <i class="fa-solid fa-shield-halved"></i> Your allocation is not confirmed until you click on "Confirm Selection".
+        </div>
+    </main>
+
+    <script>
+        function hostelApp() {
+            return {
+                selectedRoom: null,
+                rooms: [
+                    { id: 'A-101', status: 'available', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-102', status: 'occupied', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-103', status: 'female', occupancy: '1/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-104', status: 'available', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-105', status: 'available', occupancy: '1/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-106', status: 'available', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-107', status: 'occupied', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-108', status: 'available', occupancy: '1/2', type: 'Double Sharing', price: '45,000' },
+                    // Bottom row
+                    { id: 'A-116', status: 'available', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-115', status: 'available', occupancy: '1/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-114', status: 'occupied', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-113', status: 'available', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-112', status: 'available', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-111', status: 'available', occupancy: '1/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-110', status: 'occupied', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                    { id: 'A-109', status: 'available', occupancy: '2/2', type: 'Double Sharing', price: '45,000' },
+                ],
+                selectRoom(room) {
+                    if(room.status === 'available') {
+                        this.selectedRoom = room;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

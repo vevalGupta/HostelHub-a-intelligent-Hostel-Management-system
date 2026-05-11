@@ -1,0 +1,188 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Management System - Fees</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-active {
+            background-color: #8369D3;
+            color: white;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex bg-cover bg-center" style="background-image: url('{% static "home.png" %}');">
+
+    <aside class="w-72 bg-[#1A1625] text-gray-400 flex flex-col p-8 sticky top-0 h-screen">
+        <div class="flex items-center gap-3 mb-12">
+            <div class="bg-white p-1 rounded-lg">
+                    <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-10V4m-5 0V4h5"></path></svg>
+                </div>
+            <div class="text-[10px] font-bold leading-tight text-white uppercase tracking-widest">
+                Hostel <br> Management System
+            </div>
+        </div>
+        <nav class="flex-1 space-y-2">
+            <a href="{% url 'home' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                <span class="text-sm font-medium">Home</span>
+            </a>
+    
+            <a href="{% url 'room' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                <span class="text-sm font-medium">Rooms</span>
+            </a>
+            <a href="{% url 'status' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                <span class="text-sm font-medium">Status Check</span>
+            </a>
+            <a href="{% url 'fee' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl sidebar-active shadow-lg shadow-purple-900/20">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m2.12 2.12l4.24 4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m2.12-2.12l4.24-4.24"/></svg>
+                <span class="text-sm font-medium">Fees Payment</span>
+            </a>
+            <a href="{% url 'complaint' %}" class="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-800 transition-all">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span class="text-sm font-medium">Student Complaint</span>
+            </a>
+        </nav>
+        <div class="p-6 border-t border-gray-800">
+                {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="flex items-center gap-3 text-gray-500 hover:text-white transition text-sm w-full">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        Logout
+                    </button>
+                </form>
+                {% else %}
+                <a href="{% url 'login' %}" class="flex items-center gap-3 text-gray-500 hover:text-white transition text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Login
+                </a>
+                {% endif %}
+            </div>
+    </aside>
+
+    <main class="flex-1 p-10 overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+            
+            <header class="flex justify-between items-center mb-10 text-white">
+                <div>
+                    <h1 class="text-4xl font-extrabold tracking-tight">Fees Payment</h1>
+                    <p class="text-sm mt-1">Dashboard / <span class="font-semibold">Payments</span></p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div class="relative cursor-pointer">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white/40 p-1.5 pr-5 rounded-full border border-white/60">
+                        <img src="https://ui-avatars.com/api/?name={{ user.username|urlencode }}&background=8369D3&color=fff" class="w-9 h-9 rounded-full" alt="User">
+                        <div>
+                            <p class="text-xs font-bold leading-none text-white">{{ user.username }}</p>
+                            <p class="text-[10px] text-white font-medium">Student</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="bg-white rounded-[2rem] p-10 shadow-xl shadow-purple-200/50 flex flex-col lg:flex-row gap-12 mb-10 relative overflow-hidden">
+                <div class="w-full lg:w-[40%] relative z-10">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-8">Payment Information</h2>
+                    <p class="text-gray-500 font-bold uppercase text-[10px] tracking-widest mb-2">Total Fee Amount</p>
+                    <h3 class="text-5xl font-black text-[#8369D3] mb-8">
+                        ₹{{ total_fee }}
+                    </h3>
+                    
+                    <form method="POST" class="space-y-5">
+                        {% csrf_token %}
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Amount</label>
+                            <input type="number" step="0.01" name="fee_amount" placeholder="Enter Amount" required
+                                   class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8369D3] outline-none transition-all font-semibold text-gray-800">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Card Number</label>
+                            <input type="text" placeholder="Card Number" 
+                                   class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8369D3] outline-none transition-all font-semibold text-gray-800">
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-1 space-y-2">
+                                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">MM/YY</label>
+                                <input type="text" placeholder="MM/YY" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8369D3] outline-none font-semibold text-gray-800">
+                            </div>
+                            <div class="flex-1 space-y-2">
+                                <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">CVV</label>
+                                <input type="text" placeholder="CVV" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#8369D3] outline-none font-semibold text-gray-800">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-[#8369D3] text-white py-4 rounded-xl font-bold text-sm shadow-lg shadow-purple-200 hover:bg-[#7156c7] transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                            Complete Payment
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="hidden lg:flex lg:w-[60%] items-center justify-center">
+                    <img src="{% static 'fee.png' %}" alt="Fees illustration" class="w-full h-auto object-contain">
+                </div>
+            </section>
+
+            <section class="glass-card rounded-[2rem] p-10 shadow-lg border border-white/50">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-xl font-bold text-gray-800">Account Summary</h2>
+                </div>
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-[10px] text-gray-400 uppercase tracking-[0.2em] border-b border-gray-100">
+                            <th class="pb-6 font-bold">Details</th>
+                            <th class="pb-6 font-bold">Remaining Balance</th>
+                            <th class="pb-6 font-bold text-center">Status</th>
+                            <th class="pb-6 font-bold text-right">Total Fee</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50/50">
+                        <tr class="group hover:bg-white/30 transition-colors">
+                            <td class="py-5">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-[#8369D3]">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22m11-13H1"/></svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-800">Current Session Fees</p>
+                                        <p class="text-xs text-gray-500 font-medium">Session 2024-25</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-5 text-sm font-semibold text-gray-600">₹{{ remaining_balance }}</td>
+                            <td class="py-5 text-center">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase {% if is_paid %}bg-green-100 text-green-600{% else %}bg-yellow-100 text-yellow-600{% endif %}">
+                                    <span class="w-1.5 h-1.5 rounded-full {% if is_paid %}bg-green-500{% else %}bg-yellow-500{% endif %}"></span> 
+                                    {% if is_paid %}Paid{% else %}Pending{% endif %}
+                                </span>
+                            </td>
+                            <td class="py-5 text-right font-black text-[#8369D3]">₹{{ total_fee }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+    </main>
+</body>
+</html>
